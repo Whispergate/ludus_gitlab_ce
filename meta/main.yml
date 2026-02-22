@@ -1,0 +1,10 @@
+galaxy_info:
+  author: RedTeamOps
+  description: Highly resilient, flat-variable architecture GitLab CE deployment role
+  company: Internal
+  license: MIT
+  min_ansible_version: 2.10
+  platforms:
+    - name: Ubuntu
+      versions: ['22.04', '24.04']
+dependencies: []

@@ -1,0 +1,8 @@
+---
+- name: reconfigure gitlab
+  ansible.builtin.command: gitlab-ctl reconfigure
+  listen: "trigger_gitlab_reconfigure"
+
+- name: restart gitlab
+  ansible.builtin.command: gitlab-ctl restart
+  listen: "trigger_gitlab_restart"

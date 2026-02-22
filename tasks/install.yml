@@ -1,0 +1,30 @@
+---
+- name: Install prerequisite packages
+  ansible.builtin.apt:
+    name: [curl, ca-certificates, tzdata, perl]
+    state: present
+    update_cache: yes
+
+- name: Initialize APT keyrings directory
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Securely fetch and dearmor GitLab GPG signing key
+  ansible.builtin.shell: |
+    curl -fsSL https://packages.gitlab.com/gitlab/{{ gitlab_edition }}/gpgkey | gpg --dearmor -o /etc/apt/keyrings/gitlab.gpg
+  args:
+    creates: /etc/apt/keyrings/gitlab.gpg
+
+- name: Write signed-by APT repository source
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/gitlab.gpg] https://packages.gitlab.com/gitlab/{{ gitlab_edition }}/ubuntu/ {{ ansible_distribution_release | lower }} main"
+    state: present
+    filename: gitlab
+    update_cache: yes
+
+- name: Deploy GitLab package
+  ansible.builtin.apt:
+    name: "{{ gitlab_edition }}"
+    state: latest

@@ -1,0 +1,15 @@
+# Core URL Configuration
+external_url '{{ gitlab_url }}'
+
+# Email / SMTP Configuration 
+gitlab_rails['gitlab_email_from'] = '{{ gitlab_email_from }}'
+
+{% if gitlab_smtp_enable %}
+gitlab_rails['smtp_enable'] = true
+# Add additional flat vars here if SMTP needs expansion later (e.g., gitlab_smtp_address)
+{% else %}
+gitlab_rails['smtp_enable'] = false
+{% endif %}
+
+# Disable Let's Encrypt for internal/lab ranges
+letsencrypt['enable'] = false
