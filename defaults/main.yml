@@ -4,4 +4,4 @@ gitlab_email_from: gitlab@local
 gitlab_smtp_enable: false
 gitlab_groups: []
 gitlab_projects: []
-gitlab_root_password: password
+gitlab_root_password: S3cureP@$$!
