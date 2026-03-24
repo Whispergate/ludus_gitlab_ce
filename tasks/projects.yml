@@ -1,0 +1,24 @@
+- name: Get GitLab root token
+  ansible.builtin.uri:
+    url: "{{ gitlab_url }}/oauth/token"
+    method: POST
+    body_format: json
+    body:
+      grant_type: password
+      username: root
+      password: "{{ gitlab_root_password }}"
+  register: gitlab_token
+
+- name: Create GitLab projects
+  ansible.builtin.uri:
+    url: "{{ gitlab_url }}/api/v4/projects"
+    method: POST
+    headers:
+      Authorization: "Bearer {{ gitlab_token.json.access_token }}"
+    body_format: json
+    body:
+      name: "{{ item.name }}"
+      visibility: "{{ item.visibility | default('private') }}"
+      namespace_id: "{{ item.namespace_id | default(omit) }}"
+    status_code: [200, 201]
+  loop: "{{ gitlab_projects }}"

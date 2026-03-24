@@ -1,0 +1,17 @@
+- name: Copy web app source to remote
+  ansible.builtin.copy:
+    src: "{{ item.source_path }}"
+    dest: "/tmp/{{ item.name }}"
+  loop: "{{ gitlab_projects }}"
+
+- name: Init and push repo into GitLab
+  ansible.builtin.shell: |
+    cd /tmp/{{ item.name }}
+    git config --global user.email "ansible@local"
+    git config --global user.name "Ansible"
+    git init
+    git add .
+    git commit -m "Initial commit"
+    git remote add origin http://root:{{ gitlab_root_password }}@{{ gitlab_url | regex_replace('http://', '') }}/root/{{ item.name }}.git
+    git push -u origin main
+  loop: "{{ gitlab_projects }}"
