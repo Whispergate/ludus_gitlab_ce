@@ -1,0 +1,18 @@
+require 'logger'
+logger = Logger.new(STDOUT)
+
+groups = [
+{% for group in gitlab_groups %}
+  "{{ group }}",
+{% endfor %}
+]
+
+groups.each do |g|
+  path = g.downcase.gsub(/[^a-z0-9]/, '-').squeeze('-').chomp('-')
+  if Group.find_by(name: g)
+    logger.info "Group #{g} exists"
+  else
+    Group.create!(name: g, path: path, visibility_level: 20)
+    logger.info "Group #{g} created"
+  end
+end

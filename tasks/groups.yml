@@ -1,16 +1,19 @@
 ---
-- name: Execute Rails runner payload to instantiate defined groups
-  ansible.builtin.shell: >
-    gitlab-rails runner "require 'logger'; logger = Logger.new(STDOUT);
-    ['{{ gitlab_groups | join(\"', '\") }}'].each do |g|
-      path = g.downcase.gsub(/[^a-z0-9]/, '-').squeeze('-').chomp('-')
-      if Group.find_by(name: g)
-        logger.info \"Group #{g} exists\"
-      else
-        Group.create!(name: g, path: path, visibility_level: 20)
-        logger.info \"Group #{g} created\"
-      end
-    end"
+- name: Create GitLab groups
   when: gitlab_groups | length > 0
-  register: rails_output
-  changed_when: "'created' in rails_output.stdout"
+  block:
+    - name: Template Rails runner script
+      ansible.builtin.template:
+        src: create_groups.rb.j2
+        dest: /tmp/create_groups.rb
+        mode: '0644'
+
+    - name: Execute Rails runner to create groups
+      ansible.builtin.shell: gitlab-rails runner /tmp/create_groups.rb
+      register: rails_output
+      changed_when: "'created' in rails_output.stdout"
+
+    - name: Remove Rails runner script
+      ansible.builtin.file:
+        path: /tmp/create_groups.rb
+        state: absent
