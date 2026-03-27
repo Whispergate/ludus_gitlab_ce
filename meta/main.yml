@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: ludus_gitlab_ce
   author: Whispergate
   description: Highly resilient, flat-variable architecture GitLab CE deployment role
   company: Internal
