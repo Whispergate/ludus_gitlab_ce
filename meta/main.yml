@@ -1,11 +1,16 @@
 galaxy_info:
   role_name: ludus_gitlab_ce
   author: Whispergate
-  description: Highly resilient, flat-variable architecture GitLab CE deployment role
-  company: Internal
-  license: MIT
-  min_ansible_version: "2.10"
+  description: Installs a gitlab-ce instance inside a ludus range.
+  license: BSD 2-Clause
+  min_ansible_version: "2.9"
   platforms:
     - name: Ubuntu
       versions: ['jammy', 'noble']
+  galaxy_tags:
+    - gitlab
+    - git
+    - filehosting
+    - ludus
+
 dependencies: []
