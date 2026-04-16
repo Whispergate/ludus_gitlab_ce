@@ -6,7 +6,7 @@ An Ansible role for [Ludus](https://docs.ludus.cloud) that installs and configur
 
 | Variable | Required | Description |
 |---|---|---|
-| `gitlab_url` | Yes | Full URL GitLab will be reachable at (e.g. `http://gitlab.dev.sbg.corp`) |
+| `gitlab_url` | Yes | Full URL GitLab will be reachable at (e.g. `https://gitlab.dev.sbg.corp`) |
 | `gitlab_root_password` | Yes | Password for the root GitLab admin account |
 | `gitlab_groups` | No | List of group names to create |
 | `gitlab_projects` | No | List of project definitions (see below) |
